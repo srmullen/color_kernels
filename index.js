@@ -35,11 +35,6 @@ function loadImage(src, { hidden = true } = {}) {
   });
 }
 
-function displayImageKernel(img) {
-  const pixel = img[this.thread.y][this.thread.x]
-  this.color(pixel[0], pixel[1], pixel[2], pixel[3]);
-}
-
 function rgb2hsv(red, green, blue) {
   const cmax = Math.max(Math.max(red, green), blue);
   const cmin = Math.min(Math.min(red, green), blue);
@@ -126,20 +121,21 @@ function unsplashUrl(user, image) {
 }
 
 (async () => {
+  // const url = unsplashUrl('gregoryallen', '2TkHWpyHhJM');
+  // const url = unsplashUrl('z734923105', 'SJGiS1JzUCc');
   const url = 'https://source.unsplash.com/random';
   const image = await loadImage(url);
 
   const canvasContainer = document.getElementById('canvas-container');
   const canvas = createCanvas([image.width, image.height], { 
     el: canvasContainer,
-    style: 'max-height: 90vh; max-width: 90vw;'
+    style: 'max-height: 80vh; max-width: 100%;'
   });
 
   const gpu = new GPU({
     canvas
   });
 
-  
   gpu.addFunction(rgb2hsv);
   gpu.addFunction(hsv2rgb);
 

@@ -1,5 +1,5 @@
-$body-color: blanchedalmond;
-$top-padding: 20px;
+$body-color: #fff;
+$top-padding: 120px;
  
 body {
   background-color: $body-color;
@@ -7,12 +7,42 @@ body {
   padding: 0;
 }
 
+h1 {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+p {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 700;
+  line-height: 1.2em;
+  letter-spacing: 0.2px;
+  color: darkgray;
+}
+
 .container {
-  display: flex;
-  justify-content: center;
+  position: relative;
   padding-top: $top-padding;
-  .image-container {
-    max-width: 70%;
-    max-height: calc(50vh - $top-padding);
+  margin-left: 50px;
+  display: grid;
+  grid-template-columns: 70% 20px 25%;
+  max-height: 90vh;
+  #canvas-container {
+    display: flex;
+    justify-content: center;
   }
+}
+
+#controls {
+  // position: absolute;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  top: 200px;
+  right: 50px;
+  // width: 25%;
+  max-width: 300px;
+  min-width: 200px;
+  // background-color: rgb(226, 220, 205);
+  padding: 10px;
 }
