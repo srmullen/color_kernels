@@ -1,7 +1,7 @@
 import './style.scss';
 import { GPU } from 'gpu.js';
 import dat from 'dat.gui';
-import { loadImage, createCanvas, saveImage, unsplashUrl } from './utils';
+import { loadImage, createCanvas, saveImage, uploadImage, removeElement, unsplashUrl } from './utils';
 
 function rgb2hsv(red, green, blue) {
   const cmax = Math.max(Math.max(red, green), blue);
@@ -88,25 +88,25 @@ function hsvKernel(image, hueRot, saturationOffset, valueOffset) {
   // const url = unsplashUrl('gregoryallen', '2TkHWpyHhJM');
   // const url = unsplashUrl('z734923105', 'SJGiS1JzUCc');
   const url = 'https://source.unsplash.com/random';
-  const image = await loadImage(url);
+  let image = await loadImage(url);
 
   const canvasContainer = document.getElementById('canvas-container');
-  const canvas = createCanvas([image.width, image.height], { 
+  let canvas = createCanvas([image.width, image.height], { 
     el: canvasContainer,
     style: 'max-height: 80vh; max-width: 100%;'
   });
 
   // Need to preserve the drawing buffer for ability to save images.
-  const gl = canvas.getContext('webgl2', { preserveDrawingBuffer: true });
-  const gpu = new GPU({
+  // const gl = canvas.getContext('webgl2', { preserveDrawingBuffer: true });
+  let gpu = new GPU({
     canvas,
-    context: gl
+    context: canvas.getContext('webgl2', { preserveDrawingBuffer: true })
   });
 
   gpu.addFunction(rgb2hsv);
   gpu.addFunction(hsv2rgb);
 
-  const kernel = gpu.createKernel(hsvKernel, {
+  let kernel = gpu.createKernel(hsvKernel, {
     graphical: true,
     output: [image.width, image.height]
   });
@@ -118,6 +118,28 @@ function hsvKernel(image, hueRot, saturationOffset, valueOffset) {
     saturation: 0,
     value: 0
   };
+
+  uploadImage(async (img) => {
+    image = img;
+    removeElement(canvas);
+    canvas = createCanvas([image.width, image.height], {
+      el: canvasContainer,
+      style: 'max-height: 80vh; max-width: 100%;'
+    });
+
+    gpu = new GPU({
+      canvas,
+      context: canvas.getContext('webgl2', { preserveDrawingBuffer: true })
+    });
+
+    gpu.addFunction(rgb2hsv);
+    gpu.addFunction(hsv2rgb);
+    kernel = gpu.createKernel(hsvKernel, {
+      graphical: true,
+      output: [image.width, image.height]
+    });
+    kernel(image, hsv.hue, hsv.saturation, hsv.value);
+  });
 
   const fns = {
     download: () => saveImage(canvas)

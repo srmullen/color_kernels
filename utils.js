@@ -31,6 +31,22 @@ export function loadImage(src, { hidden = true } = {}) {
   });
 }
 
+export function uploadImage(onload) {
+  window.addEventListener('load', function () {
+    document.querySelector('input[type="file"]').addEventListener('change', function () {
+      if (this.files && this.files[0]) {
+        var img = document.querySelector('img');  // $('img')[0]
+        img.src = URL.createObjectURL(this.files[0]); // set src to blob url
+        img.hidden = true;
+        img.onload = () => {
+          onload(img);
+        };
+        document.body.appendChild(img);
+      }
+    });
+  });
+}
+
 export function saveImage(canvas) {
   const img = canvas.toDataURL('image/jpeg', 1.0);
   const link = document.createElement('a');
@@ -39,6 +55,10 @@ export function saveImage(canvas) {
   link.style = 'display: none';
   document.body.appendChild(link);
   link.click();
+}
+
+export function removeElement(el) {
+  el.parentNode.removeChild(el);
 }
 
 export function unsplashUrl(user, image) {
