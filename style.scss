@@ -1,0 +1,18 @@
+$body-color: blanchedalmond;
+$top-padding: 20px;
+ 
+body {
+  background-color: $body-color;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding-top: $top-padding;
+  .image-container {
+    max-width: 70%;
+    max-height: calc(50vh - $top-padding);
+  }
+}
