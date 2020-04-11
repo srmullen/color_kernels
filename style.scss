@@ -18,7 +18,7 @@ p {
   font-weight: 700;
   line-height: 1.2em;
   letter-spacing: 0.2px;
-  color: darkgray;
+  opacity: 0.7;
 }
 
 .container {
@@ -35,14 +35,12 @@ p {
 }
 
 #controls {
-  // position: absolute;
+  position: relative;
   border: 1px solid lightgray;
   border-radius: 5px;
-  top: 200px;
-  right: 50px;
-  // width: 25%;
+  margin: 40px 0;
   max-width: 300px;
   min-width: 200px;
-  // background-color: rgb(226, 220, 205);
   padding: 10px;
+  // box-shadow: 20px 20px 20px 1px #ccc;
 }

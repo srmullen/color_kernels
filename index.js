@@ -1,39 +1,7 @@
 import './style.scss';
 import { GPU } from 'gpu.js';
 import dat from 'dat.gui';
-
-function createCanvas(
-  [width, height], 
-  { hidden = false, el=document.body, id, style, className } = {}
-) {
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  if (style) {
-    canvas.style = style;
-  }
-  if (className) {
-    canvas.className = className;
-  }
-  canvas.hidden = hidden;
-  if (id) {
-    canvas.id = id;
-  }
-  el.appendChild(canvas);
-
-  return canvas;
-}
-
-function loadImage(src, { hidden = true } = {}) {
-  return new Promise((resolve, reject) => {
-    const image = document.createElement('img');
-    image.crossOrigin = 'Anonymous'; // To avoid tainted canvas
-    image.src = src;
-    image.hidden = hidden;
-    image.onload = () => resolve(image);
-    document.body.appendChild(image);
-  });
-}
+import { loadImage, createCanvas, saveImage, unsplashUrl } from './utils';
 
 function rgb2hsv(red, green, blue) {
   const cmax = Math.max(Math.max(red, green), blue);
@@ -113,11 +81,7 @@ function hsvKernel(image, hueRot, saturationOffset, valueOffset) {
 
   // Now change back to RGB
   let [r, g, b] = hsv2rgb(hue, sat, val);
-  this.color(r, g, b);
-}
-
-function unsplashUrl(user, image) {
-  return `https://source.unsplash.com/user/${user}/${image}`;
+  this.color(r, g, b, pixel[3]);
 }
 
 (async () => {
@@ -132,8 +96,11 @@ function unsplashUrl(user, image) {
     style: 'max-height: 80vh; max-width: 100%;'
   });
 
+  // Need to preserve the drawing buffer for ability to save images.
+  const gl = canvas.getContext('webgl2', { preserveDrawingBuffer: true });
   const gpu = new GPU({
-    canvas
+    canvas,
+    context: gl
   });
 
   gpu.addFunction(rgb2hsv);
@@ -152,6 +119,10 @@ function unsplashUrl(user, image) {
     value: 0
   };
 
+  const fns = {
+    download: () => saveImage(canvas)
+  }
+
   gui.add(hsv, 'hue', -180, 180).onChange(() => {
     kernel(image, hsv.hue, hsv.saturation, hsv.value);
   });
@@ -161,6 +132,8 @@ function unsplashUrl(user, image) {
   gui.add(hsv, 'value', -1, 1).step(0.01).onChange(() => {
     kernel(image, hsv.hue, hsv.saturation, hsv.value);
   });
+  gui.add(fns, 'download');
 
   kernel(image, hsv.hue, hsv.saturation, hsv.value);
+  // kernel(image);
 })();
