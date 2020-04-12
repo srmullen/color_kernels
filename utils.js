@@ -31,7 +31,7 @@ export function loadImage(src, { hidden = true } = {}) {
   });
 }
 
-export function uploadImage(onload) {
+export function uploadImage(onload, onerror) {
   window.addEventListener('load', function () {
     document.querySelector('input[type="file"]').addEventListener('change', function () {
       if (this.files && this.files[0]) {
@@ -41,6 +41,7 @@ export function uploadImage(onload) {
         img.onload = () => {
           onload(img);
         };
+        img.onerror = onerror;
         document.body.appendChild(img);
       }
     });
