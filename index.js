@@ -2,6 +2,7 @@ import './style.scss';
 import { GPU } from 'gpu.js';
 import dat from 'dat.gui';
 import throttle from 'lodash.throttle';
+import cryptoRandomString from 'crypto-random-string';
 import { hsv2rgb, rgb2hsv, hsvKernel } from './kernels';
 import { loadImage, createCanvas, saveImage, uploadImage, removeElement } from './utils';
 
@@ -29,9 +30,13 @@ function setupKernel(image) {
   return kernel;
 }
 
+function randomImage() {
+  const url = `https://source.unsplash.com/random?_=${cryptoRandomString({ length: 6 })}`;
+  return loadImage(url);
+}
+
 (async () => {
-  const url = 'https://source.unsplash.com/random';
-  let image = await loadImage(url);
+  let image = await randomImage();
 
   let kernel = setupKernel(image);
 
@@ -54,7 +59,7 @@ function setupKernel(image) {
   // Attach events to the 'Random Image' Button
   document.getElementById('random-btn').onclick = async () => {
     removeElement(kernel.canvas);
-    image = await loadImage(url);
+    image = await randomImage();
     kernel = setupKernel(image);
     kernel(image, hsv.hue, hsv.saturation, hsv.value);
   }

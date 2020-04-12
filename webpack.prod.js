@@ -17,7 +17,7 @@ module.exports = env => {
     },
     optimization: {
       minimize: true,
-      minimizer: [new TerserJSPlugin({}), new OpimizeCSSAssetsPlugin({})]
+      minimizer: [new TerserJSPlugin(), new OpimizeCSSAssetsPlugin()]
     },
     plugins: [
       new CleanWebpackPlugin(),
