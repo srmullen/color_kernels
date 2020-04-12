@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --port 8000",
-    "build": "webpack --config webpack.prod.js --env.NODE_ENV=production"
+    "build": "webpack --config webpack.prod.js --env.NODE_ENV=production",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [
     "color",
@@ -22,6 +23,7 @@
     "@babel/core": "^7.9.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.5.2",
+    "gh-pages": "^2.2.0",
     "mini-css-extract-plugin": "^0.9.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "style-loader": "^1.1.3",
