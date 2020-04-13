@@ -59,79 +59,27 @@ function randomImage() {
   return loadImage(url);
 }
 
-// (async () => {
-//   const setupKernel = setupHSVKernel;
-
-//   let image = await randomImage();
-
-//   let kernel = setupKernel(image);
-
-//   const gui = new dat.GUI();
-
-//   const hsv = {
-//     hue: 0,
-//     saturation: 0,
-//     value: 0
-//   };
-
-//   // Attach events to the 'Choose Image' button
-//   uploadImage((img) => {
-//     image = img;
-//     removeElement(kernel.canvas);
-//     kernel = setupKernel(image);
-//     kernel(image, hsv.hue, hsv.saturation, hsv.value);
-//   });
-
-//   // Attach events to the 'Random Image' Button
-//   document.getElementById('random-btn').onclick = async () => {
-//     removeElement(kernel.canvas);
-//     image = await randomImage();
-//     kernel = setupKernel(image);
-//     kernel(image, hsv.hue, hsv.saturation, hsv.value);
-//   }
-
-//   const fns = {
-//     download: () => saveImage(kernel.canvas)
-//   }
-
-//   const onChange = throttle(() => {
-//     kernel(image, hsv.hue, hsv.saturation, hsv.value);
-//   }, 50);
-
-//   gui.add(hsv, 'hue', 0, 360).onChange(onChange);
-//   gui.add(hsv, 'saturation', -1, 1).step(0.01).onChange(onChange);
-//   gui.add(hsv, 'value', -1, 1).step(0.01).onChange(onChange);
-//   gui.add(fns, 'download');
-
-//   kernel(image, hsv.hue, hsv.saturation, hsv.value);
-// })();
-
 (async () => {
-  const setupKernel = setupCMYKKernel;
+  const setupKernel = setupHSVKernel;
 
   let image = await randomImage();
+
   let kernel = setupKernel(image);
 
   const gui = new dat.GUI();
 
-  const cmyk = {
-    cyan: 1,
-    yellow: 1,
-    magenta: 1,
-    key: 1
+  const hsv = {
+    hue: 0,
+    saturation: 1,
+    value: 1
   };
-
-  const onChange = throttle(() => {
-    kernel(image, cmyk.cyan, cmyk.magenta, cmyk.yellow, cmyk.key);
-  }, 50);
 
   // Attach events to the 'Choose Image' button
   uploadImage((img) => {
     image = img;
     removeElement(kernel.canvas);
     kernel = setupKernel(image);
-    // kernel(image, hsv.hue, hsv.saturation, hsv.value);
-    onChange();
+    kernel(image, hsv.hue, hsv.saturation, hsv.value);
   });
 
   // Attach events to the 'Random Image' Button
@@ -139,19 +87,71 @@ function randomImage() {
     removeElement(kernel.canvas);
     image = await randomImage();
     kernel = setupKernel(image);
-    onChange();
-    // kernel(image, hsv.hue, hsv.saturation, hsv.value);
+    kernel(image, hsv.hue, hsv.saturation, hsv.value);
   }
 
   const fns = {
     download: () => saveImage(kernel.canvas)
   }
 
-  gui.add(cmyk, 'cyan', 0, 1).step(0.01).onChange(onChange);
-  gui.add(cmyk, 'magenta', 0, 1).step(0.01).onChange(onChange);
-  gui.add(cmyk, 'yellow', 0, 1).step(0.01).onChange(onChange);
-  gui.add(cmyk, 'key', 0, 1).step(0.01).onChange(onChange);
+  const onChange = throttle(() => {
+    kernel(image, hsv.hue, hsv.saturation, hsv.value);
+  }, 50);
+
+  gui.add(hsv, 'hue', -180, 180).onChange(onChange);
+  gui.add(hsv, 'saturation', 0, 3).step(0.01).onChange(onChange);
+  gui.add(hsv, 'value', 0, 3).step(0.01).onChange(onChange);
   gui.add(fns, 'download');
 
-  kernel(image, cmyk.cyan, cmyk.magenta, cmyk.yellow, cmyk.key);
+  kernel(image, hsv.hue, hsv.saturation, hsv.value);
 })();
+
+// (async () => {
+//   const setupKernel = setupCMYKKernel;
+
+//   let image = await randomImage();
+//   let kernel = setupKernel(image);
+
+//   const gui = new dat.GUI();
+
+//   const cmyk = {
+//     cyan: 1,
+//     yellow: 1,
+//     magenta: 1,
+//     key: 1
+//   };
+
+//   const onChange = throttle(() => {
+//     kernel(image, cmyk.cyan, cmyk.magenta, cmyk.yellow, cmyk.key);
+//   }, 50);
+
+//   // Attach events to the 'Choose Image' button
+//   uploadImage((img) => {
+//     image = img;
+//     removeElement(kernel.canvas);
+//     kernel = setupKernel(image);
+//     // kernel(image, hsv.hue, hsv.saturation, hsv.value);
+//     onChange();
+//   });
+
+//   // Attach events to the 'Random Image' Button
+//   document.getElementById('random-btn').onclick = async () => {
+//     removeElement(kernel.canvas);
+//     image = await randomImage();
+//     kernel = setupKernel(image);
+//     onChange();
+//     // kernel(image, hsv.hue, hsv.saturation, hsv.value);
+//   }
+
+//   const fns = {
+//     download: () => saveImage(kernel.canvas)
+//   }
+
+//   gui.add(cmyk, 'cyan', 0, 2).step(0.01).onChange(onChange);
+//   gui.add(cmyk, 'magenta', 0, 2).step(0.01).onChange(onChange);
+//   gui.add(cmyk, 'yellow', 0, 2).step(0.01).onChange(onChange);
+//   gui.add(cmyk, 'key', 0, 2).step(0.01).onChange(onChange);
+//   gui.add(fns, 'download');
+
+//   kernel(image, cmyk.cyan, cmyk.magenta, cmyk.yellow, cmyk.key);
+// })();

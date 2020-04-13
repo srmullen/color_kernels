@@ -62,7 +62,7 @@ export const hsv2rgb = `function hsv2rgb(hue, sat, val) {
   return [r + m, g + m, b + m];
 }`;
 
-export const hsvKernel = `function hsvKernel(image, hueRot, saturationOffset, valueOffset) {
+export const hsvKernel = `function hsvKernel(image, hueRot, saturationMult, valueMult) {
   const pixel = image[this.thread.y][this.thread.x];
   const red = pixel[0];
   const green = pixel[1];
@@ -70,9 +70,9 @@ export const hsvKernel = `function hsvKernel(image, hueRot, saturationOffset, va
 
   let [hue, sat, val] = rgb2hsv(red, green, blue);
 
-  hue = (hue + hueRot) % 360;
-  sat = Math.max(0, Math.min(1, sat + saturationOffset));
-  val = Math.max(0, Math.min(1, val + valueOffset));
+  hue = (hue + hueRot + 360) % 360;
+  sat = sat * saturationMult;
+  val = val * valueMult;
 
   // Now change back to RGB
   let [r, g, b] = hsv2rgb(hue, sat, val);
@@ -107,10 +107,6 @@ export function cmykKernel(image, cm, mm, ym, bm) {
   const blue = pixel[2];
 
   let [cyan, magenta, yellow, black] = rgb2cmyk(red, green, blue);
-
-  // hue = (hue + hueRot) % 360;
-  // sat = Math.max(0, Math.min(1, sat + saturationOffset));
-  // val = Math.max(0, Math.min(1, val + valueOffset));
 
   cyan = cyan * cm;
   magenta = magenta * mm;
