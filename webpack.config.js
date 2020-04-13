@@ -5,14 +5,14 @@ module.exports = env => {
   return {
     devtool: 'eval-source-map',
     mode: 'development',
-    entry: './index.js',
+    entry: './src/index.js',
     output: {
       path: path.resolve(__dirname, './dist'),
       filename: "bundle.js"
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'index.html'
+        template: './src/index.html'
       })
     ],
     module: {
