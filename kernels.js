@@ -78,3 +78,46 @@ export const hsvKernel = `function hsvKernel(image, hueRot, saturationOffset, va
   let [r, g, b] = hsv2rgb(hue, sat, val);
   this.color(r, g, b, pixel[3]);
 }`;
+
+/**
+ * 
+ * @param {Number} red - number in range 0 to 1.
+ * @param {Number} green - number in range 0 to 1.
+ * @param {Number} blue - number in range 0 to 1.
+ */
+export function rgb2cmyk(red, green, blue) {
+  const k = 1 - Math.max(red, Math.max(green, blue));
+  const c = (1 - red - k) / (1 - k);
+  const m = (1 - green - k) / (1 - k);
+  const y = (1 - blue - k) / (1 - k);
+  return [c, m, y, k];
+}
+
+export function cmyk2rgb(cyan, yellow, magenta, black) {
+  const r = (1 - cyan) * (1 - black);
+  const g = (1 - magenta) * (1 - black);
+  const b = (1 - yellow) * (1 - black);
+  return [r, g, b];
+}
+
+export function cmykKernel(image, cm, mm, ym, bm) {
+  const pixel = image[this.thread.y][this.thread.x];
+  const red = pixel[0];
+  const green = pixel[1];
+  const blue = pixel[2];
+
+  let [cyan, magenta, yellow, black] = rgb2cmyk(red, green, blue);
+
+  // hue = (hue + hueRot) % 360;
+  // sat = Math.max(0, Math.min(1, sat + saturationOffset));
+  // val = Math.max(0, Math.min(1, val + valueOffset));
+
+  cyan = cyan * cm;
+  magenta = magenta * mm;
+  yellow = yellow * ym;
+  black = black * bm;
+
+  // Now change back to RGB
+  const [r, g, b] = cmyk2rgb(cyan, yellow, magenta, black);
+  this.color(r, g, b, pixel[3]);
+}
