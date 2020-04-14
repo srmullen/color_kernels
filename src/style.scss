@@ -56,8 +56,14 @@ label {
 
   .row1 {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     grid-row: 1;
+    .left-buttons {
+      width: 280px;
+      display: flex;
+      justify-content: space-between;
+      
+    }
   }
 
   .row2 {

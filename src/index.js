@@ -75,12 +75,16 @@ function randomImage() {
     value: 1
   };
 
+  const onChange = throttle(() => {
+    kernel(image, hsv.hue, hsv.saturation, hsv.value);
+  }, 50);
+
   // Attach events to the 'Choose Image' button
   uploadImage((img) => {
     image = img;
     removeElement(kernel.canvas);
     kernel = setupKernel(image);
-    kernel(image, hsv.hue, hsv.saturation, hsv.value);
+    onChange();
   });
 
   // Attach events to the 'Random Image' Button
@@ -88,21 +92,26 @@ function randomImage() {
     removeElement(kernel.canvas);
     image = await randomImage();
     kernel = setupKernel(image);
-    kernel(image, hsv.hue, hsv.saturation, hsv.value);
+    onChange();
+  }
+
+  document.getElementById('download-btn').onclick = () => {
+    saveImage(kernel.canvas);
   }
 
   const fns = {
-    download: () => saveImage(kernel.canvas)
+    reset: () => {
+      hsv.hue = 0;
+      hsv.saturation = 1;
+      hsv.value = 1;
+      onChange();
+    }
   }
 
-  const onChange = throttle(() => {
-    kernel(image, hsv.hue, hsv.saturation, hsv.value);
-  }, 50);
-
-  gui.add(hsv, 'hue', -180, 180).onChange(onChange);
-  gui.add(hsv, 'saturation', 0, 3).step(0.01).onChange(onChange);
-  gui.add(hsv, 'value', 0, 3).step(0.01).onChange(onChange);
-  gui.add(fns, 'download');
+  gui.add(hsv, 'hue', -180, 180).onChange(onChange).listen();
+  gui.add(hsv, 'saturation', 0, 3).step(0.01).onChange(onChange).listen();
+  gui.add(hsv, 'value', 0, 3).step(0.01).onChange(onChange).listen();
+  gui.add(fns, 'reset');
 
   kernel(image, hsv.hue, hsv.saturation, hsv.value);
 })();
@@ -131,7 +140,6 @@ function randomImage() {
 //     image = img;
 //     removeElement(kernel.canvas);
 //     kernel = setupKernel(image);
-//     // kernel(image, hsv.hue, hsv.saturation, hsv.value);
 //     onChange();
 //   });
 
@@ -141,7 +149,6 @@ function randomImage() {
 //     image = await randomImage();
 //     kernel = setupKernel(image);
 //     onChange();
-//     // kernel(image, hsv.hue, hsv.saturation, hsv.value);
 //   }
 
 //   const fns = {
