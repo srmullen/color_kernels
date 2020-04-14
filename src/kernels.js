@@ -1,3 +1,16 @@
+export const rgbKernel = `function rgbKernel(image, redMult, greenMult, blueMult) {
+  const pixel = image[this.thread.y][this.thread.x];
+  const red = pixel[0];
+  const green = pixel[1];
+  const blue = pixel[2];
+
+  const r = red * redMult;
+  const g = green * greenMult;
+  const b = blue * blueMult;
+
+  this.color(r, g, b, pixel[3]);
+}`
+
 export const rgb2hsv = `function rgb2hsv(red, green, blue) {
   const cmax = Math.max(Math.max(red, green), blue);
   const cmin = Math.min(Math.min(red, green), blue);
@@ -85,22 +98,22 @@ export const hsvKernel = `function hsvKernel(image, hueRot, saturationMult, valu
  * @param {Number} green - number in range 0 to 1.
  * @param {Number} blue - number in range 0 to 1.
  */
-export function rgb2cmyk(red, green, blue) {
+export const rgb2cmyk = `function rgb2cmyk(red, green, blue) {
   const k = 1 - Math.max(red, Math.max(green, blue));
   const c = (1 - red - k) / (1 - k);
   const m = (1 - green - k) / (1 - k);
   const y = (1 - blue - k) / (1 - k);
   return [c, m, y, k];
-}
+}`;
 
-export function cmyk2rgb(cyan, yellow, magenta, black) {
+export const cmyk2rgb = `function cmyk2rgb(cyan, yellow, magenta, black) {
   const r = (1 - cyan) * (1 - black);
   const g = (1 - magenta) * (1 - black);
   const b = (1 - yellow) * (1 - black);
   return [r, g, b];
-}
+}`;
 
-export function cmykKernel(image, cm, mm, ym, bm) {
+export const cmykKernel = `function cmykKernel(image, cm, mm, ym, bm) {
   const pixel = image[this.thread.y][this.thread.x];
   const red = pixel[0];
   const green = pixel[1];
@@ -116,4 +129,4 @@ export function cmykKernel(image, cm, mm, ym, bm) {
   // Now change back to RGB
   const [r, g, b] = cmyk2rgb(cyan, yellow, magenta, black);
   this.color(r, g, b, pixel[3]);
-}
+}`;
