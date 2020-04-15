@@ -65,3 +65,9 @@ export function removeElement(el) {
 export function unsplashUrl(user, image) {
   return `https://source.unsplash.com/user/${user}/${image}`;
 }
+
+export function randomImage() {
+  // const url = `https://source.unsplash.com/random?_=${cryptoRandomString({ length: 6 })}`;
+  const url = `https://picsum.photos/1000`;
+  return loadImage(url);
+}

@@ -29,7 +29,8 @@ module.exports = env => {
       ]
     },
     devServer: {
-      contentBase: __dirname
+      contentBase: __dirname,
+      historyApiFallback: true
     }
   };
 }

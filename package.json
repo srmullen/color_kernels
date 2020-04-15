@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Color System Conversions",
   "main": "index.js",
+  "homepage": "https://srmullen.github.io/color_kernels/",
   "scripts": {
     "dev": "webpack-dev-server --hot --port 8000",
     "build": "webpack --config webpack.prod.js --env.NODE_ENV=production",
@@ -40,6 +41,7 @@
     "gpu.js": "^2.9.3",
     "html-webpack-plugin": "^4.2.0",
     "lodash.throttle": "^4.1.1",
+    "navigo": "^7.1.2",
     "node-sass": "^4.13.1",
     "sass-loader": "^8.0.2"
   }

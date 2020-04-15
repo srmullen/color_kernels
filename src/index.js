@@ -2,15 +2,9 @@ import './style.scss';
 import { GPU } from 'gpu.js';
 import dat from 'dat.gui';
 import throttle from 'lodash.throttle';
-import cryptoRandomString from 'crypto-random-string';
+import Navigo from 'navigo';
 import { rgbKernel, hsv2rgb, rgb2hsv, hsvKernel, rgb2cmyk, cmyk2rgb, cmykKernel } from './kernels';
-import { loadImage, createCanvas, saveImage, uploadImage, removeElement } from './utils';
-
-function randomImage() {
-  // const url = `https://source.unsplash.com/random?_=${cryptoRandomString({ length: 6 })}`;
-  const url = `https://picsum.photos/1000`;
-  return loadImage(url);
-}
+import { createCanvas, saveImage, uploadImage, removeElement, randomImage } from './utils';
 
 function setupRGBKernel(image) {
   const canvasContainer = document.getElementById('canvas-container');
@@ -79,30 +73,24 @@ function setupCMYKKernel(image) {
   return kernel;
 }
 
-function rgbParams(image, kernel) {
+function createRGBParams() {
   return {
-    image,
-    kernel,
     red: 1,
     green: 1,
     blue: 1
   };
 }
 
-function hsvParams(image, kernel) {
+function createHSVParams() {
   return {
-    image,
-    kernel,
     hue: 0,
     saturation: 1,
     value: 1
   };
 }
 
-function cmykParams(image, kernel) {
+function createCMYKParams() {
   return {
-    kernel,
-    image,
     cyan: 1,
     yellow: 1,
     magenta: 1,
@@ -110,11 +98,11 @@ function cmykParams(image, kernel) {
   };
 }
 
-function setupRGBGui(params) {
+function setupRGBGui(kernel, params) {
   const gui = new dat.GUI();
 
   const onChange = throttle(() => {
-    params.kernel(params.image, params.red, params.green, params.blue);
+    kernel(params.image, params.red, params.green, params.blue);
   }, 50);
 
   const fns = {
@@ -134,11 +122,11 @@ function setupRGBGui(params) {
   return [gui, onChange];
 }
 
-function setupHSVGui(params) {
+function setupHSVGui(kernel, params) {
   const gui = new dat.GUI();
 
   const onChange = throttle(() => {
-    params.kernel(params.image, params.hue, params.saturation, params.value);
+    kernel(params.image, params.hue, params.saturation, params.value);
   }, 50);
 
   const fns = {
@@ -158,11 +146,11 @@ function setupHSVGui(params) {
   return [gui, onChange];
 }
 
-function setupCMYKGui(params) {
+function setupCMYKGui(kernel, params) {
   const gui = new dat.GUI();
 
   const onChange = throttle(() => {
-    params.kernel(params.image, params.cyan, params.magenta, params.yellow, params.key);
+    kernel(params.image, params.cyan, params.magenta, params.yellow, params.key);
   }, 50);
 
   const fns = {
@@ -184,38 +172,125 @@ function setupCMYKGui(params) {
   return [gui, onChange];
 }
 
-async function createPage(setupKernel, setupGui, createParams) {
-  const image = await randomImage();
-  const kernel = setupKernel(image);
+const RGB = 'RGB';
+const HSV = 'HSV';
+const CMYK = 'CMYK';
 
-  const params = createParams(image, kernel);
+function setupKernel(mode, image) {
+  if (mode === RGB) {
+    return setupRGBKernel(image);
+  } else if (mode === HSV) {
+    return setupHSVKernel(image);
+  } else if (mode === CMYK) {
+    return setupCMYKKernel(image);
+  } else {
+    throw new Error('No color mode defined');
+  }
+}
 
-  const [gui, onChange] = setupGui(params);
+function setupGui(mode, kernel, params) {
+  if (mode === RGB) {
+    return setupRGBGui(kernel, params);
+  } else if (mode === HSV) {
+    return setupHSVGui(kernel, params);
+  } else if (mode === CMYK) {
+    return setupCMYKGui(kernel, params);
+  } else {
+    throw new Error('No color mode defined');
+  }
+}
+
+(async () => {
+  const router = new Navigo(null);
+
+  let image = await randomImage();
+  let kernel, gui, onChange, mode;
+
+  const rgbParams = createRGBParams();
+  const hsvParams = createHSVParams();
+  const cmykParams = createCMYKParams();
+
+  function setImage(img) {
+    rgbParams.image = img;
+    hsvParams.image = img;
+    cmykParams.image = img;
+  }
+
+  setImage(image);
+
+  function onKernelChange() {
+    if (kernel) {
+      removeElement(kernel.canvas);
+    }
+    if (gui) {
+      gui.destroy();
+    }
+  }
+
+  function getParams(colorMode) {
+    if (colorMode === RGB) {
+      return rgbParams;
+    } else if (colorMode === HSV) {
+      return hsvParams;
+    } else if (colorMode === CMYK) {
+      return cmykParams;
+    } else {
+      throw new Error('No color mode defined');
+    }
+  }
+
+  router.on({
+    '/': () => {
+      mode = RGB;
+      onKernelChange();
+      kernel = setupKernel(mode, image);
+      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      onChange();
+    },
+    '/rgb': () => {
+      mode = RGB;
+      onKernelChange();
+      kernel = setupKernel(mode, image);
+      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      onChange();
+    },
+    '/hsv': () => {
+      mode = HSV;
+      onKernelChange();
+      kernel = setupKernel(mode, image);
+      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      onChange();
+    },
+    '/cmyk': () => {
+      mode = CMYK;
+      onKernelChange();
+      kernel = setupKernel(mode, image);
+      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      onChange();
+    }
+  });
+  router.resolve();
 
   // Attach events to the 'Choose Image' button
   uploadImage((img) => {
-    removeElement(params.kernel.canvas);
-    params.image = img;
-    params.kernel = setupKernel(img);
+    setImage(img);
+    onKernelChange();
+    kernel = setupKernel(mode, image);
+    [gui, onChange] = setupGui(mode, kernel, getParams(mode));
     onChange();
   });
 
   // Attach events to the 'Random Image' Button
   document.getElementById('random-btn').onclick = async () => {
-    removeElement(params.kernel.canvas);
-    const img = await randomImage();
-    params.image = img;
-    params.kernel = setupKernel(img);
+    const image = await randomImage();
+    setImage(image);
+    onKernelChange();
+    kernel = setupKernel(mode, image);
+    [gui, onChange] = setupGui(mode, kernel, getParams(mode));
     onChange();
   }
 
   document.getElementById('download-btn').onclick = () => {
-    saveImage(params.kernel.canvas);
+    saveImage(kernel.canvas);
   }
-
-  onChange();
-}
-
-createPage(setupRGBKernel, setupRGBGui, rgbParams);
-// createPage(setupHSVKernel, setupHSVGui, hsvParams);
-// createPage(setupCMYKKernel, setupCMYKGui, cmykParams);
+})();
