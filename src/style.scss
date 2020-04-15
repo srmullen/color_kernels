@@ -1,17 +1,53 @@
 $body-color: #fff;
-$top-padding: 120px;
+$top-padding: 80px;
 $primary-color: rgb(214, 3, 3);
+
  
 body {
   background-color: $body-color;
   margin: 0;
   padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+nav {
+  display: flex;
+  font-size: 20px;
+  position: relative;
+  top: 20px;
+  left: 20px;
+  width: 50%;
+  z-index: 10;
+  text-align: center;
+  align-items: center;
+  a {
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid darkgray;
+    border-radius: 5px;
+    color: darkgray;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+
+    &.active {
+      span {
+        opacity: 0.7;
+      }
+      color: white;
+      background-color: rgb(39, 70, 247);
+    }
+  }
 }
 
 h1 {
   font-family: 'Playfair Display', serif;
   letter-spacing: 0.3px;
   text-transform: uppercase;
+
+  &.title {
+    font-size: 1.7em;
+    margin: 0 20px 0 0;
+  }
 }
 
 p {

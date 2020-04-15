@@ -239,9 +239,35 @@ function setupGui(mode, kernel, params) {
     }
   }
 
+  const activateLink = (() => {
+    const rgb = document.getElementById('rgbLink')
+    const hsv = document.getElementById('hsvLink');
+    const cmyk = document.getElementById('cmykLink');
+    return (mode) => {
+      if (mode === RGB) {
+        rgb.classList.add('active');
+        hsv.classList.remove('active');
+        cmyk.classList.remove('active');
+      } else if (mode === HSV) {
+        rgb.classList.remove('active');
+        hsv.classList.add('active');
+        cmyk.classList.remove('active');
+      } else if (mode === CMYK) {
+        rgb.classList.remove('active');
+        hsv.classList.remove('active');
+        cmyk.classList.add('active');
+      } else {
+        rgb.classList.remove('active');
+        hsv.classList.remove('active');
+        cmyk.classList.remove('active');
+      }
+    }
+  })();
+
   router.on({
     '/': () => {
       mode = RGB;
+      activateLink(mode);
       onKernelChange();
       kernel = setupKernel(mode, image);
       [gui, onChange] = setupGui(mode, kernel, getParams(mode));
@@ -249,6 +275,7 @@ function setupGui(mode, kernel, params) {
     },
     '/rgb': () => {
       mode = RGB;
+      activateLink(mode);
       onKernelChange();
       kernel = setupKernel(mode, image);
       [gui, onChange] = setupGui(mode, kernel, getParams(mode));
@@ -256,6 +283,7 @@ function setupGui(mode, kernel, params) {
     },
     '/hsv': () => {
       mode = HSV;
+      activateLink(mode);
       onKernelChange();
       kernel = setupKernel(mode, image);
       [gui, onChange] = setupGui(mode, kernel, getParams(mode));
@@ -263,6 +291,7 @@ function setupGui(mode, kernel, params) {
     },
     '/cmyk': () => {
       mode = CMYK;
+      activateLink(mode);
       onKernelChange();
       kernel = setupKernel(mode, image);
       [gui, onChange] = setupGui(mode, kernel, getParams(mode));

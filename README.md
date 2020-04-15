@@ -7,6 +7,10 @@ https://gearside.com/color-black-represented-k-cmyk/
 CMYK refers to the four ink plates used in some types of printing.
 K in CMYK is black and stands for 'key' because it is used to add detail to a print.
 
+TODO
+----
+- Lock button
+
 -------------------------------------------------------------------------------------
 
 How does a jpeg store the pixels? How about a png? And other files? I think they probably all use rgb. Even svg files which don't have pixels use hex colors, which is an RGB format. This make sense. The pixels of a computer screens are composed of tiny red, green, and blue lights. Take a magnifying glass to whatever device you're reading this essay on and you'll probably see them. (Should I mentions the eye's cone cells?)
