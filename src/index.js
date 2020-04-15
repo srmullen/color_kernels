@@ -269,32 +269,36 @@ function setupGui(mode, kernel, params) {
       mode = RGB;
       activateLink(mode);
       onKernelChange();
-      kernel = setupKernel(mode, image);
-      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      const params = getParams(mode);
+      kernel = setupKernel(mode, params.image);
+      [gui, onChange] = setupGui(mode, kernel, params);
       onChange();
     },
     '/rgb': () => {
       mode = RGB;
       activateLink(mode);
       onKernelChange();
-      kernel = setupKernel(mode, image);
-      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      const params = getParams(mode);
+      kernel = setupKernel(mode, params.image);
+      [gui, onChange] = setupGui(mode, kernel, params);
       onChange();
     },
     '/hsv': () => {
       mode = HSV;
       activateLink(mode);
       onKernelChange();
-      kernel = setupKernel(mode, image);
-      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      const params = getParams(mode);
+      kernel = setupKernel(mode, params.image);
+      [gui, onChange] = setupGui(mode, kernel, params);
       onChange();
     },
     '/cmyk': () => {
       mode = CMYK;
       activateLink(mode);
       onKernelChange();
-      kernel = setupKernel(mode, image);
-      [gui, onChange] = setupGui(mode, kernel, getParams(mode));
+      const params = getParams(mode);
+      kernel = setupKernel(mode, params.image);
+      [gui, onChange] = setupGui(mode, kernel, params);
       onChange();
     }
   });

@@ -121,10 +121,10 @@ export const cmykKernel = `function cmykKernel(image, cm, mm, ym, bm) {
 
   let [cyan, magenta, yellow, black] = rgb2cmyk(red, green, blue);
 
-  cyan = cyan * cm;
-  magenta = magenta * mm;
-  yellow = yellow * ym;
-  black = black * bm;
+  cyan = Math.min(cyan * cm, 1);
+  magenta = Math.min(magenta * mm, 1);
+  yellow = Math.min(yellow * ym, 1);
+  black = Math.min(black * bm, 1);
 
   // Now change back to RGB
   const [r, g, b] = cmyk2rgb(cyan, yellow, magenta, black);
