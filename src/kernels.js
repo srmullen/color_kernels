@@ -106,7 +106,7 @@ export const rgb2cmyk = `function rgb2cmyk(red, green, blue) {
   return [c, m, y, k];
 }`;
 
-export const cmyk2rgb = `function cmyk2rgb(cyan, yellow, magenta, black) {
+export const cmyk2rgb = `function cmyk2rgb(cyan, magenta, yellow, black) {
   const r = (1 - cyan) * (1 - black);
   const g = (1 - magenta) * (1 - black);
   const b = (1 - yellow) * (1 - black);
@@ -127,6 +127,6 @@ export const cmykKernel = `function cmykKernel(image, cm, mm, ym, bm) {
   black = Math.min(black * bm, 1);
 
   // Now change back to RGB
-  const [r, g, b] = cmyk2rgb(cyan, yellow, magenta, black);
+  const [r, g, b] = cmyk2rgb(cyan, magenta, yellow, black);
   this.color(r, g, b, pixel[3]);
 }`;

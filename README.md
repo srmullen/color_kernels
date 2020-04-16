@@ -13,7 +13,11 @@ TODO
 
 -------------------------------------------------------------------------------------
 
-How does a jpeg store the pixels? How about a png? And other files? I think they probably all use rgb. Even svg files which don't have pixels use hex colors, which is an RGB format. This make sense. The pixels of a computer screens are composed of tiny red, green, and blue lights. Take a magnifying glass to whatever device you're reading this essay on and you'll probably see them. (Should I mentions the eye's cone cells?)
+PNG is RGB format.
+GIF is RGB format.
+JPEG is a digital photo compression format.
+
+How does a jpeg store the pixels? How about a png? And other files? I think they probably all use rgb. Even svg files which don't have pixels use hex colors, which is an RGB format. This make sense. The pixels of a computer screens are composed of tiny red, green, and blue lights. Take a magnifying glass to whatever device you're reading this essay on and you'll probably see them. (Should I mention the eye's cone cells?)
 
 This is not the only way color can be represented. It works well for systems creating color with light sources, but this doesn't work for other mediums. Consider painting your new picket fence. You wouldn't mix a red, green, and blue paint together and expect it to be white. The HOA will be knocking at your door. This illustrates the difference between additive and subtractive color models.
 
