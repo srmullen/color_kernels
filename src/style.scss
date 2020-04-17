@@ -20,14 +20,19 @@ nav {
   z-index: 10;
   text-align: center;
   align-items: center;
-  a {
+
+  button {
     text-decoration: none;
     padding: 10px 20px;
     border: 1px solid darkgray;
     border-radius: 5px;
     color: darkgray;
     font-weight: 700;
+    font-size: 20px;
     letter-spacing: 1.2px;
+    font-family: 'Courier New', Courier, monospace;
+    cursor: pointer;
+    outline: none;
 
     &.active {
       span {

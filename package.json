@@ -43,6 +43,7 @@
     "lodash.throttle": "^4.1.1",
     "navigo": "^7.1.2",
     "node-sass": "^4.13.1",
+    "query-string": "^6.12.1",
     "sass-loader": "^8.0.2"
   }
 }

@@ -2,7 +2,7 @@ import './style.scss';
 import { GPU } from 'gpu.js';
 import dat from 'dat.gui';
 import throttle from 'lodash.throttle';
-import Navigo from 'navigo';
+import queryString from 'query-string';
 import { rgbKernel, hsv2rgb, rgb2hsv, hsvKernel, rgb2cmyk, cmyk2rgb, cmykKernel } from './kernels';
 import { createCanvas, saveImage, uploadImage, removeElement, randomImage } from './utils';
 
@@ -172,9 +172,9 @@ function setupCMYKGui(kernel, params) {
   return [gui, onChange];
 }
 
-const RGB = 'RGB';
-const HSV = 'HSV';
-const CMYK = 'CMYK';
+const RGB = 'rgb';
+const HSV = 'hsv';
+const CMYK = 'cmyk';
 
 function setupKernel(mode, image) {
   if (mode === RGB) {
@@ -200,11 +200,32 @@ function setupGui(mode, kernel, params) {
   }
 }
 
-(async () => {
-  const router = new Navigo(null);
+function getModeFromQuery() {
+  const { mode } = queryString.parse(window.location.search);
 
+  if (!mode) {
+    return RGB;
+  } else if (mode.toLowerCase() === RGB) {
+    return RGB
+  } else if (mode.toLowerCase() === HSV) {
+    return HSV;
+  } else if (mode.toLowerCase() === CMYK) {
+    return CMYK;
+  }
+}
+
+function setQuery(query) {
+  if (history.pushState) {
+    // var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?myNewUrlQuery=1';
+    const url = `${window.location.origin}/?${queryString.stringify(query)}`;
+    window.history.pushState({ path: url }, '', url);
+  }
+}
+
+(async () => {
+  let mode = getModeFromQuery();
   let image = await randomImage();
-  let kernel, gui, onChange, mode;
+  let kernel, gui, onChange;
 
   const rgbParams = createRGBParams();
   const hsvParams = createHSVParams();
@@ -240,9 +261,10 @@ function setupGui(mode, kernel, params) {
   }
 
   const activateLink = (() => {
-    const rgb = document.getElementById('rgbLink')
-    const hsv = document.getElementById('hsvLink');
-    const cmyk = document.getElementById('cmykLink');
+    const rgb = document.getElementById('rgbBtn')
+    const hsv = document.getElementById('hsvBtn');
+    const cmyk = document.getElementById('cmykBtn');
+
     return (mode) => {
       if (mode === RGB) {
         rgb.classList.add('active');
@@ -264,45 +286,35 @@ function setupGui(mode, kernel, params) {
     }
   })();
 
-  router.on({
-    '/': () => {
-      mode = RGB;
-      activateLink(mode);
-      onKernelChange();
-      const params = getParams(mode);
-      kernel = setupKernel(mode, params.image);
-      [gui, onChange] = setupGui(mode, kernel, params);
-      onChange();
-    },
-    '/rgb': () => {
-      mode = RGB;
-      activateLink(mode);
-      onKernelChange();
-      const params = getParams(mode);
-      kernel = setupKernel(mode, params.image);
-      [gui, onChange] = setupGui(mode, kernel, params);
-      onChange();
-    },
-    '/hsv': () => {
-      mode = HSV;
-      activateLink(mode);
-      onKernelChange();
-      const params = getParams(mode);
-      kernel = setupKernel(mode, params.image);
-      [gui, onChange] = setupGui(mode, kernel, params);
-      onChange();
-    },
-    '/cmyk': () => {
-      mode = CMYK;
-      activateLink(mode);
-      onKernelChange();
-      const params = getParams(mode);
-      kernel = setupKernel(mode, params.image);
-      [gui, onChange] = setupGui(mode, kernel, params);
-      onChange();
-    }
-  });
-  router.resolve();
+  function setup() {
+    activateLink(mode);
+    onKernelChange();
+    const params = getParams(mode);
+    kernel = setupKernel(mode, params.image);
+    [gui, onChange] = setupGui(mode, kernel, params);
+    onChange();
+  }
+
+  setup();
+
+  const rgb = document.getElementById('rgbBtn')
+  const hsv = document.getElementById('hsvBtn');
+  const cmyk = document.getElementById('cmykBtn');
+  rgb.onclick = () => {
+    mode = RGB;
+    setQuery({ mode });
+    setup();
+  }
+  hsv.onclick = () => {
+    mode = HSV;
+    setQuery({ mode });
+    setup();
+  }
+  cmyk.onclick = () => {
+    mode = CMYK;
+    setQuery({ mode });
+    setup();
+  }
 
   // Attach events to the 'Choose Image' button
   uploadImage((img) => {
