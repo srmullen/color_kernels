@@ -10,6 +10,8 @@ K in CMYK is black and stands for 'key' because it is used to add detail to a pr
 TODO
 ----
 - Lock button
+- Loader and error handling
+- Web cam option.
 
 -------------------------------------------------------------------------------------
 
