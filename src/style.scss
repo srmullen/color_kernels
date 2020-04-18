@@ -44,9 +44,10 @@ nav {
 }
 
 h1 {
-  font-family: 'Playfair Display', serif;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
+  font-weight: 600;
   text-transform: uppercase;
+  display: inline;
 
   &.title {
     font-size: 1.7em;
@@ -101,7 +102,6 @@ main {
 
 #gui {
   position: absolute;
-  // left: 73%;
   left: 50px;
   z-index: 10;
 }
@@ -112,15 +112,11 @@ main {
   margin-left: 50px;
   display: grid;
   grid-template-columns: 70% 20px 25%;
-  grid-template-rows: 100px 50px auto;
+  grid-template-rows: 100px 50px auto auto;
   max-height: 90vh;
   #canvas-container {
     display: flex;
     justify-content: center;
-  }
-
-  .column1 {
-    max-width: 1000px;
   }
 
   .row0 {
@@ -156,8 +152,7 @@ main {
   border: 1px solid lightgray;
   border-radius: 5px;
   margin: 40px 0;
-  max-width: 300px;
-  min-width: 200px;
+  min-width: 230px;
   padding: 10px;
   grid-row: 3;
   grid-column: 3;
@@ -191,5 +186,14 @@ main {
       background-color: lighten($color: $blue, $amount: 5);
       opacity: 0.7;
     }
+  }
+}
+
+@media screen and (max-width: 990px) {
+  #controls {
+    grid-row: 4;
+    grid-column: 1;
+    width: 100%;
+    max-width: none;
   }
 }
