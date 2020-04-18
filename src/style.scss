@@ -1,5 +1,5 @@
 $body-color: #fff;
-$top-padding: 20px;
+$top-padding: 10px;
 $primary-color: rgb(214, 3, 3);
 $green: green;
 $blue: rgb(39, 70, 247);
@@ -13,17 +13,24 @@ body {
 }
 
 nav {
-  display: flex;
+  // display: flex;
   font-size: 20px;
   position: relative;
   z-index: 10;
   text-align: center;
   align-items: center;
-  float: right;
+  // float: right;
+  width: 100%;
+
+  .links {
+    float: right;
+  }
 
   button {
+    width: 80px;
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 5px 15px;
+    margin: 10px;
     border: 1px solid darkgray;
     color: darkgray;
     font-weight: 700;
@@ -97,7 +104,7 @@ main {
   position: relative;
   margin: auto;
   max-width: 1500px;
-  min-width: 990px;
+  // min-width: 990px;
 }
 
 #gui {
@@ -112,38 +119,36 @@ main {
   margin-left: 50px;
   display: grid;
   grid-template-columns: 70% 20px 25%;
-  grid-template-rows: 100px 50px auto auto;
+  grid-template-rows: 150px auto 70px auto;
   max-height: 90vh;
-  #canvas-container {
-    display: flex;
-    justify-content: center;
-  }
+  // #canvas-container {
+  //   display: flex;
+  //   justify-content: center;
+  // }
 
   .row0 {
     grid-row: 1;
     max-width: 1000px;
-    .links {
-      float: right;
-      width: 300px;
-      display: flex;
-      justify-content: space-between;  
-    }
   }
 
-  .row1 {
-    grid-row: 2;
+  .button-row {
+    grid-row: 3;
     max-width: 1000px;
     .buttons {
-      float: right;
+      div {
+        margin-bottom: 5px;
+      }
+      padding-top: 20px;
       width: 400px;
       display: flex;
       justify-content: space-between;  
+      flex-wrap: wrap;
     }
   }
 
   .row2 {
-    max-width: 1000px;
-    grid-row: 3;
+    // max-width: 1000px;
+    grid-row: 2;
   }
 }
 
@@ -154,7 +159,7 @@ main {
   margin: 40px 0;
   min-width: 230px;
   padding: 10px;
-  grid-row: 3;
+  grid-row: 2;
   grid-column: 3;
 }
 
@@ -195,5 +200,32 @@ main {
     grid-column: 1;
     width: 100%;
     max-width: none;
+  }
+
+  .links {
+    button {
+      display: block;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    .row0 {
+      grid-row: 2;
+      grid-column: 3;
+    }
+
+    .button-row {
+      .buttons {
+        width: 250px;
+      }
+    }
+  }
+
+  .links {
+    button {
+      font-size: 14px;
+    }
   }
 }

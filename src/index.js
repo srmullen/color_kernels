@@ -6,11 +6,13 @@ import queryString from 'query-string';
 import { rgbKernel, hsv2rgb, rgb2hsv, hsvKernel, rgb2cmyk, cmyk2rgb, cmykKernel } from './kernels';
 import { createCanvas, saveImage, uploadImage, removeElement, randomImage } from './utils';
 
+const CANVAS_STYLE = 'max-height: 75vh; max-width: 100%;';
+
 function setupRGBKernel(image) {
   const canvasContainer = document.getElementById('canvas-container');
   const canvas = createCanvas([image.width, image.height], {
     el: canvasContainer,
-    style: 'max-height: 80vh; max-width: 100%;'
+    style: CANVAS_STYLE
   });
 
   const gpu = new GPU({
@@ -29,7 +31,7 @@ function setupHSVKernel(image) {
   const canvasContainer = document.getElementById('canvas-container');
   let canvas = createCanvas([image.width, image.height], {
     el: canvasContainer,
-    style: 'max-height: 80vh; max-width: 100%;'
+    style: CANVAS_STYLE
   });
 
   let gpu = new GPU({
@@ -53,7 +55,7 @@ function setupCMYKKernel(image) {
   const canvasContainer = document.getElementById('canvas-container');
   let canvas = createCanvas([image.width, image.height], {
     el: canvasContainer,
-    style: 'max-height: 80vh; max-width: 100%;'
+    style: CANVAS_STYLE
   });
 
   let gpu = new GPU({
