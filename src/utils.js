@@ -70,6 +70,6 @@ export function unsplashUrl(user, image) {
 
 export function randomImage() {
   // const url = `https://source.unsplash.com/random?_=${cryptoRandomString({ length: 6 })}`;
-  const url = `https://picsum.photos/1000?_=${cryptoRandomString({ length: 6 })}`;
+  const url = `https://picsum.photos/1333/1000?_=${cryptoRandomString({ length: 6 })}`;
   return loadImage(url);
 }
