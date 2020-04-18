@@ -99,7 +99,9 @@ function createCMYKParams() {
 }
 
 function setupRGBGui(kernel, params) {
-  const gui = new dat.GUI();
+  const guiContainer = document.getElementById('gui');
+  const gui = new dat.GUI({ autoPlace: false });
+  guiContainer.appendChild(gui.domElement);
 
   const onChange = throttle(() => {
     kernel(params.image, params.red, params.green, params.blue);
@@ -123,7 +125,9 @@ function setupRGBGui(kernel, params) {
 }
 
 function setupHSVGui(kernel, params) {
-  const gui = new dat.GUI();
+  const guiContainer = document.getElementById('gui');
+  const gui = new dat.GUI({ autoPlace: false });
+  guiContainer.appendChild(gui.domElement);
 
   const onChange = throttle(() => {
     kernel(params.image, params.hue, params.saturation, params.value);
@@ -147,7 +151,9 @@ function setupHSVGui(kernel, params) {
 }
 
 function setupCMYKGui(kernel, params) {
-  const gui = new dat.GUI();
+  const guiContainer = document.getElementById('gui');
+  const gui = new dat.GUI({ autoPlace: false });
+  guiContainer.appendChild(gui.domElement);
 
   const onChange = throttle(() => {
     kernel(params.image, params.cyan, params.magenta, params.yellow, params.key);
@@ -245,6 +251,7 @@ function setQuery(query) {
     }
     if (gui) {
       gui.destroy();
+      removeElement(gui.domElement);
     }
   }
 

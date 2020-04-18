@@ -1,5 +1,5 @@
 $body-color: #fff;
-$top-padding: 80px;
+$top-padding: 20px;
 $primary-color: rgb(214, 3, 3);
 $green: green;
 $blue: rgb(39, 70, 247);
@@ -16,19 +16,15 @@ nav {
   display: flex;
   font-size: 20px;
   position: relative;
-  top: 20px;
-  left: 20px;
-  width: 600px;
   z-index: 10;
   text-align: center;
   align-items: center;
-  margin-left: 50px;
+  float: right;
 
   button {
     text-decoration: none;
     padding: 10px 20px;
     border: 1px solid darkgray;
-    border-radius: 5px;
     color: darkgray;
     font-weight: 700;
     font-size: 20px;
@@ -79,7 +75,6 @@ p {
 }
 
 label {
-  // background-color: $primary-color;
   padding: 10px;
   color: #fff;
   font-family: 'Courier New', Courier, monospace;
@@ -97,32 +92,62 @@ label {
   }
 }
 
+main {
+  position: relative;
+  margin: auto;
+  max-width: 1500px;
+  min-width: 990px;
+}
+
+#gui {
+  position: absolute;
+  // left: 73%;
+  left: 50px;
+  z-index: 10;
+}
+
 .container {
   position: relative;
   padding-top: $top-padding;
   margin-left: 50px;
   display: grid;
   grid-template-columns: 70% 20px 25%;
-  grid-template-rows: 50px auto;
+  grid-template-rows: 100px 50px auto;
   max-height: 90vh;
   #canvas-container {
     display: flex;
     justify-content: center;
   }
 
-  .row1 {
+  .column1 {
+    max-width: 1000px;
+  }
+
+  .row0 {
     grid-row: 1;
+    max-width: 1000px;
+    .links {
+      float: right;
+      width: 300px;
+      display: flex;
+      justify-content: space-between;  
+    }
+  }
+
+  .row1 {
+    grid-row: 2;
+    max-width: 1000px;
     .buttons {
       float: right;
       width: 400px;
       display: flex;
-      justify-content: space-between;
-      
+      justify-content: space-between;  
     }
   }
 
   .row2 {
-    grid-row: 2;
+    max-width: 1000px;
+    grid-row: 3;
   }
 }
 
@@ -134,9 +159,8 @@ label {
   max-width: 300px;
   min-width: 200px;
   padding: 10px;
-  grid-row: 2;
+  grid-row: 3;
   grid-column: 3;
-  // box-shadow: 20px 20px 20px 1px #ccc;
 }
 
 .btn {
