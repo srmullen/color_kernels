@@ -222,8 +222,7 @@ function getModeFromQuery() {
 
 function setQuery(query) {
   if (history.pushState) {
-    // var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?myNewUrlQuery=1';
-    const url = `${window.location.origin}/?${queryString.stringify(query)}`;
+    const url = `${window.location.origin}${window.location.pathname}?${queryString.stringify(query)}`;
     window.history.pushState({ path: url }, '', url);
   }
 }
