@@ -73,10 +73,3 @@ Footnotes
 
 -------------------------------------------------------------------------------------
 
-
-
-TODO
-----
-- Lock button
-- Loader and error handling
-- Web cam option.
